@@ -1,6 +1,7 @@
 pipeline {
-    agent {
-        label { image 'node:20-alpine' }
+    agent any
+    tools {
+        nodejs 'node26'
     }
     stages {
         stage("Install") {
