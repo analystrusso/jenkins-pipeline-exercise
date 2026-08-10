@@ -4,6 +4,15 @@ pipeline {
         nodejs 'node26'
     }
     stages {
+        stage("Build") {
+            steps {
+                script {
+                    echo "building...."
+                    sh 'docker build -t demo-app:1.0 .'
+                }
+            }
+        }
+
         stage("Install") {
             steps {
                 script {
