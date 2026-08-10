@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+    tools {
+        npm 'node26'
+    }
+    stages {
+        stage("Install") {
+            steps {
+                script {
+                    echo "installing...."
+                    sh 'npm ci'
+                }
+            }
+        }
+
+        stage("Test") {
+            steps {
+                script {
+                    echo "testing...."
+                    sh 'npm test'
+                }
+            }
+        }
+
+        stage("Start") {
+            steps {
+                script {
+                    echo "starting...."
+                    sh 'npm start'
+                }
+            }
+        }
+    }
+}
