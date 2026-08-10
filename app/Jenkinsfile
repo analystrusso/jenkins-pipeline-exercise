@@ -8,8 +8,7 @@ pipeline {
             steps {
                 script {
                     echo "installing...."
-                    sh 'apt update && apt install libatomic1'
-                    sh 'npm ci'
+                    sh 'npm install'
                 }
             }
         }
