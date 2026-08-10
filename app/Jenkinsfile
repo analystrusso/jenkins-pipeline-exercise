@@ -8,7 +8,8 @@ pipeline {
             steps {
                 script {
                     echo "installing...."
-                    sh 'npm install'
+                    sh 'apk add libatomic'
+                    sh 'npm ci'
                 }
             }
         }
