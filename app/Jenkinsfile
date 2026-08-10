@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        docker { image 'node:26-alpine' }
+    }
     tools {
         nodejs 'node26'
     }
@@ -8,7 +10,7 @@ pipeline {
             steps {
                 script {
                     echo "installing...."
-                    sh 'apt update && apt install libatomic1'
+                    sh 'sudo apt update && apt install libatomic1'
                     sh 'npm ci'
                 }
             }
