@@ -1,6 +1,10 @@
 pipeline {
     agent any
     stages {
+        stage('Version') {
+            echo 'bumping version....'
+        }
+        
         stage('Test') {
             steps {
                 echo 'testing the app....'
