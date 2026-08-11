@@ -4,17 +4,16 @@ pipeline {
         stage('Version') {
             steps {
                 script{
-                    dir('app')
+                    dir('app') {
                         echo 'bumping version....'
                         def jsonFile = readJSON file: 'package.json'
                         sh 'npm install'
                         sh 'npm version minor --no-git-tag-version'
                         echo "Version from file: ${jsonFile.version}"
-                }
 
-            }
-            
-            
+                    }
+                }
+            } 
         }
         
         stage('Test') {
