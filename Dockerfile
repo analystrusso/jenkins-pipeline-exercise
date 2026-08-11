@@ -8,7 +8,7 @@ COPY app/ /home/app
 
 WORKDIR /home/app
 
-RUN npm ci
+RUN npm install
 
 CMD ["node", "server.js"]
 
