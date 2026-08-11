@@ -2,14 +2,12 @@ FROM node:20-bullseye
 
 EXPOSE 3000
 
-WORKDIR /home/app
+COPY app/ /home/app
 
-COPY package*.json .
+WORKDIR /home/app
 
 RUN npm install
 
-COPY . .
-
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
 
 

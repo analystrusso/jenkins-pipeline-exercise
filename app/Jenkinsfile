@@ -2,38 +2,37 @@ pipeline {
     agent any
 
     stages {
-        stage("Increment Version") {
-            steps {
-                script {
-                    sh 'npm version minor --no-git-tag-version'
-                }
-            }
-        }
-        stage("Build") {
+        stage("bump version") {
             steps {
                 script {
                     echo "building the docker image..."
                     dir('app') {
-                            sh "docker build -t analystrusso/jenkins-exercise:1.0 ."
+                        sh "npm version minor --no-git-tag-version"
+                        def packageJson = readJSON file: 'package.json'
+                        def version = packageJson.version
+
+                        env.IMAGE_NAME= "$version-$BUILD_NUMBER"
                     }
                 }
             }
         }
 
-        stage("Test") {
+        stage("test") {
             steps {
                 script {
                     echo "testing...."
+                    sh "npm install"
                     sh 'docker run --rm analystrusso/jenkins-exercise:1.0 npm test'
                 }
             }
         }
 
-        stage("Push") {
+        stage("build and push") {
             steps {
                 script {
                     echo "pushing to dockerhub...."
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                    sh "docker build -t analystrusso/jenkins-exercise:1.0 ."
                     sh 'echo $PASS | docker login -u $USER --password-stdin'
                     sh "docker push analystrusso/jenkins-exercise:1.0"
                     }
