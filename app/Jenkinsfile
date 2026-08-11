@@ -2,14 +2,6 @@ pipeline {
     agent any
 
     stages {
-        stage("Install") {
-            steps {
-                script {
-                    echo "installing...."
-                    sh 'npm install'
-                }
-            }
-        }
         stage("Build") {
             steps {
                 script {
@@ -24,11 +16,12 @@ pipeline {
             }
         }
     }
+
         stage("Test") {
             steps {
                 script {
                     echo "testing...."
-                    sh 'npm test'
+                    sh 'docker run --rm analystrusso/jenkins-exercise:1.0 npm test'
                 }
             }
         }
