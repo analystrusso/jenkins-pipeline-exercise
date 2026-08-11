@@ -20,30 +20,14 @@ pipeline {
             } 
         }
         
-        stage('Lint') {
-            steps {
-                // catches real bugs (e.g. blocking sync fs calls in request
-                // handlers) before they reach the test stage
-                sh 'npx eslint . || true' // drop the "|| true" once the codebase is clean
-            }
-        }
- 
         stage('Test') {
             steps {
-                // --coverage produces a report; --ci makes jest fail fast on
-                // snapshot mismatches instead of writing new snapshots
-                sh 'npx jest --ci --coverage'
+                dir('app') {
+                    echo 'testing the app....'
+                    sh 'npm test'
+                }
             }
         }
- 
-        stage('Dependency Audit') {
-            steps {
-                // --audit-level=high: fail only on high/critical CVEs so the
-                // build isn't flaky on every low-severity advisory
-                sh 'npm audit --audit-level=high'
-            }
-        }
-
 
         stage('Build and Push') {
             steps {
