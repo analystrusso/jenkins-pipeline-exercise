@@ -10,9 +10,9 @@ pipeline {
                     echo "building the docker image..."
                     dir('app') {
                         withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                            sh "docker build -t analystrusso/twn-bootcamp-repo:1.0 ."
+                            sh "docker build -t analystrusso/jenkins-exercise:1.0 ."
                             sh 'echo $PASS | docker login -u $USER --password-stdin'
-                            sh "docker push analystrusso/twn-bootcamp-repo:1.0"
+                            sh "docker push analystrusso/jenkins-exercise:1.0"
                     }
                 }
             }
@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
                     echo "installing...."
-                    sh 'su - && apt install libatomic1'
+                    sh 'apt install libatomic1'
                     sh 'npm install'
                 }
             }

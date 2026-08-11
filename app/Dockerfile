@@ -1,4 +1,4 @@
-FROM node:26-alpine
+FROM alpine:3.14
 
 EXPOSE 3000
 
@@ -6,7 +6,8 @@ WORKDIR /home/app
 
 COPY package*.json .
 
-RUN npm install
+RUN apk libatomic1 \
+    && npm install
 
 COPY . .
 
