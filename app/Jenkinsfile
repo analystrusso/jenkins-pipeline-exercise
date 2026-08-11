@@ -9,8 +9,6 @@ pipeline {
                     dir('app') {
                         withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                             sh "docker build -t analystrusso/jenkins-exercise:1.0 ."
-                            sh 'echo $PASS | docker login -u $USER --password-stdin'
-                            sh "docker push analystrusso/jenkins-exercise:1.0"
                     }
                 }
             }
@@ -26,11 +24,12 @@ pipeline {
             }
         }
 
-        stage("Start") {
+        stage("Push") {
             steps {
                 script {
-                    echo "starting...."
-                    sh 'npm start'
+                    echo "pushing to dockerhub...."
+                    sh 'echo $PASS | docker login -u $USER --password-stdin'
+                    sh "docker push analystrusso/jenkins-exercise:1.0"
                 }
             }
         }
