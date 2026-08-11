@@ -2,7 +2,13 @@ pipeline {
     agent any
     stages {
         stage('Version') {
-            echo 'bumping version....'
+            steps {
+                echo 'bumping version....'
+                def jsonFile = readJSON file: 'app/package.json'
+                echo "Version from file: ${jsonFile.version}"
+            }
+            
+            
         }
         
         stage('Test') {
