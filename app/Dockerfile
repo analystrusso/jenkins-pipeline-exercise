@@ -6,7 +6,7 @@ WORKDIR /home/app
 
 COPY package*.json .
 
-RUN apk libatomic1 \
+RUN apk add libatomic \
     && npm install
 
 COPY . .
