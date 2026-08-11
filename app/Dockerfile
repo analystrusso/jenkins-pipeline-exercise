@@ -1,4 +1,4 @@
-FROM alpine:3.14
+FROM node:20-bullseye
 
 EXPOSE 3000
 
