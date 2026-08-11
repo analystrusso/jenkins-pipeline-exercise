@@ -3,9 +3,12 @@ pipeline {
     stages {
         stage('Version') {
             steps {
+                script{
                 echo 'bumping version....'
                 def jsonFile = readJSON file: 'app/package.json'
                 echo "Version from file: ${jsonFile.version}"
+                }
+
             }
             
             
