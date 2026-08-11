@@ -22,7 +22,10 @@ pipeline {
         
         stage('Test') {
             steps {
-                echo 'testing the app....'
+                dir('app') {
+                    echo 'testing the app....'
+                    sh 'npm test'
+                }
             }
         }
 
