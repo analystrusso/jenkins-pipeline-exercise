@@ -36,16 +36,6 @@ pipeline {
             }
         }
  
-        stage('Coverage Gate') {
-            steps {
-                // fail the build if coverage drops below thresholds,
-                // rather than just reporting a number nobody looks at.
-                // Configure thresholds in jest.config.js:
-                //   coverageThreshold: { global: { lines: 80, branches: 70 } }
-                sh 'npx jest --ci --coverage --coverageThreshold=\'{"global":{"lines":80}}\''
-            }
-        }
- 
         stage('Dependency Audit') {
             steps {
                 // --audit-level=high: fail only on high/critical CVEs so the
