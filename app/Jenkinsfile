@@ -14,7 +14,7 @@ pipeline {
                         sh "npm version minor --no-git-tag-version"
                         def jsonFile2 = readJSON file: 'package.json'
                         echo "Version from file: ${jsonFile2.version}"
-                        env.BUILD_VERSION = "${$jsonFile2.version}"
+                        env.BUILD_VERSION = "${jsonFile2.version}"
                     }
                 }
             } 
