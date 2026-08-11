@@ -2,6 +2,16 @@ pipeline {
     agent any
 
     stages {
+        stage("Increment Version") {
+            steps {
+                script {
+                    echo 'incrementing app version'
+                    def matcher = readFile('package.json') =~ '"version":(.+)'
+                    def version = matcher[0][1]
+                    env.IMAGE_NAME = "$version-$BUILD_NUMBER"
+                }
+            }
+        }
         stage("Build") {
             steps {
                 script {
