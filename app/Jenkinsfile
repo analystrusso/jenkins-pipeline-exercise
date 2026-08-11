@@ -20,14 +20,40 @@ pipeline {
             } 
         }
         
-        stage('Test') {
+        stage('Lint') {
             steps {
-                dir('app') {
-                    echo 'testing the app....'
-                    sh 'npm test'
-                }
+                // catches real bugs (e.g. blocking sync fs calls in request
+                // handlers) before they reach the test stage
+                sh 'npx eslint . || true' // drop the "|| true" once the codebase is clean
             }
         }
+ 
+        stage('Test') {
+            steps {
+                // --coverage produces a report; --ci makes jest fail fast on
+                // snapshot mismatches instead of writing new snapshots
+                sh 'npx jest --ci --coverage'
+            }
+        }
+ 
+        stage('Coverage Gate') {
+            steps {
+                // fail the build if coverage drops below thresholds,
+                // rather than just reporting a number nobody looks at.
+                // Configure thresholds in jest.config.js:
+                //   coverageThreshold: { global: { lines: 80, branches: 70 } }
+                sh 'npx jest --ci --coverage --coverageThreshold=\'{"global":{"lines":80}}\''
+            }
+        }
+ 
+        stage('Dependency Audit') {
+            steps {
+                // --audit-level=high: fail only on high/critical CVEs so the
+                // build isn't flaky on every low-severity advisory
+                sh 'npm audit --audit-level=high'
+            }
+        }
+
 
         stage('Build and Push') {
             steps {
