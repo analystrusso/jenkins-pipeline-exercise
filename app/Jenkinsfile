@@ -4,7 +4,7 @@ pipeline {
         stage('Version') {
             steps {
                 script{
-                    dir("app")
+                    dir('app')
                         echo 'bumping version....'
                         def jsonFile = readJSON file: 'app/package.json'
                         sh 'npm install'
