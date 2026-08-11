@@ -9,6 +9,7 @@ COPY app/ /home/app
 WORKDIR /home/app
 
 RUN npm install
+RUN apt install libatomic1
 
 CMD ["node", "server.js"]
 
