@@ -9,9 +9,9 @@ pipeline {
             steps {
                 script {
                     echo "building the docker image..."
-                    dir('app') {
+                    dir("app") {
                         sh "npm install"
-                        sh 'npm version minor --no-git-tag-version'
+                        sh "npm version minor --no-git-tag-version"
                         def packageJson = readJSON file: 'package.json'
                         def version = packageJson.version
 
