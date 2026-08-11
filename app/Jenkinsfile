@@ -12,9 +12,9 @@ pipeline {
                 echo 'building the app...'
                 echo 'pushing the app...'
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]){
-                    sh "docker build -t docker-hub-id/myapp:1.0 ."
+                    sh "docker build -t analystrusso/jenkins-exercise:1.0 ."
                     sh 'echo $PASS | docker login -u $USER --password-stdin'
-                    sh "docker push docker-hub-id/myapp:1.0"
+                    sh "docker push analystrusso/jenkins-exercise:1.0"
                 }
             }
         }
