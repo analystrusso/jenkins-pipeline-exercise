@@ -12,7 +12,6 @@ pipeline {
                 }
             }
         }
-    }
 
         stage("Test") {
             steps {
@@ -30,6 +29,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                     sh 'echo $PASS | docker login -u $USER --password-stdin'
                     sh "docker push analystrusso/jenkins-exercise:1.0"
+                    }
                 }
             }
         }
