@@ -9,10 +9,11 @@ pipeline {
                 script{
                     dir('app') {
                         echo 'bumping version....'
-                        echo "Version from file: ${jsonFile.version}"
+                        def jsonFile1 = readJSON file: 'package.json'
+                        echo "Version from file: ${jsonFile1.version}"
                         sh "npm version minor --no-git-tag-version"
-                        def jsonFile = readJSON file: 'package.json'
-                        echo "Version from file: ${jsonFile.version}"
+                        def jsonFile2 = readJSON file: 'package.json'
+                        echo "Version from file: ${jsonFile2.version}"
                     }
                 }
             } 
