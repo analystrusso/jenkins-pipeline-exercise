@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
                     echo "installing...."
-                    sh 'apt install libatomic1'
+                    sh 'su - && apt install libatomic1'
                     sh 'npm install'
                 }
             }
