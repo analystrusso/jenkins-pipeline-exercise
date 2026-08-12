@@ -67,6 +67,7 @@ pipeline {
                 script {
                     echo "deploying on server...."
                     sshagent(['remote-server-ssh']) {
+                        sh "ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_IP} 'docker rm -f --name jenkins-exercise || true'"
                         sh "ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_IP} 'docker run -d -p 3000:3000 --name jenkins-exercise analystrusso/jenkins-exercise:${BUILD_VERSION}'"
                     }
                 }
