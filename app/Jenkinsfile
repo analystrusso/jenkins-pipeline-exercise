@@ -1,4 +1,4 @@
-@Library('cicd-sharedlib') _
+@Library('cicd-shared-lib') _
 
 pipeline {
     agent any
