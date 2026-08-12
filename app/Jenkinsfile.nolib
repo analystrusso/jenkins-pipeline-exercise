@@ -1,0 +1,77 @@
+pipeline {
+    agent any
+    environment {
+        REMOTE_USER = 'root'
+        REMOTE_IP = '67.205.183.170'
+    }
+    tools {
+        nodejs "node"
+    }
+    stages {
+        stage('Version') {
+            steps {
+                script{
+                    dir('app') {
+                        echo 'bumping version....'
+                        def jsonFile1 = readJSON file: 'package.json'
+                        echo "Version from file: ${jsonFile1.version}"
+                        sh "npm version minor --no-git-tag-version"
+                        def jsonFile2 = readJSON file: 'package.json'
+                        echo "Version from file: ${jsonFile2.version}"
+                        env.BUILD_VERSION = "${jsonFile2.version}"
+                    }
+                }
+            } 
+        }
+        
+        stage('Test') {
+            steps {
+                dir('app') {
+                    echo 'testing the app....'
+                    sh 'npm test'
+                }
+            }
+        }
+
+        stage('Build and Push') {
+            steps {
+                echo 'building the app...'
+                echo 'pushing the app...'
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'USER', passwordVariable: 'PASS')]){
+                    sh "docker build -t analystrusso/jenkins-exercise:${BUILD_VERSION} ."
+                    sh 'echo $PASS | docker login -u $USER --password-stdin'
+                    sh "docker push analystrusso/jenkins-exercise:${BUILD_VERSION}"
+                }
+            }
+        }
+
+        stage('Commit version update') {
+            steps {
+                script {
+                    echo 'commit version update'
+                    withCredentials([string(credentialsId: 'github-PAT', variable: 'GH_TOKEN')]) {
+                        sh 'git config --global user.email "jenkins@example.com"'
+                        sh 'git config --global user.name "jenkins"'
+                        sh 'git remote set-url origin https://x-access-token:$GH_TOKEN@github.com/analystrusso/jenkins-pipeline-exercise.git'
+                        sh 'git add .'
+                        sh 'git commit -m "ci: version bump"'
+                        sh 'git push origin HEAD:dev'
+                    }
+ 
+                }
+            }
+        }
+
+        stage('Deploy on server') {
+            steps {
+                script {
+                    echo "deploying on server...."
+                    sshagent(['remote-server-ssh']) {
+                        sh "ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_IP} 'docker rm -f jenkins-exercise || true'"
+                        sh "ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_IP} 'docker run -d -p 3000:3000 --name jenkins-exercise analystrusso/jenkins-exercise:${BUILD_VERSION}'"
+                    }
+                }
+            }
+        }
+    }
+}
