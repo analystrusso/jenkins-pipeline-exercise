@@ -66,6 +66,7 @@ pipeline {
                     sh "docker build -t analystrusso/jenkins-exercise:${BUILD_VERSION} ."
                     sh 'echo $PASS | docker login -u $USER --password-stdin'
                     sh "docker pull analystrusso/jenkins-exercise:${BUILD_VERSION}"
+                    }
                 }
             }
         }
