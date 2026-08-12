@@ -1,7 +1,6 @@
 pipeline {
     agent any
     environment {
-        IMAGE_NAME = "analystrusso/jenkins-exercise:${BUILD_VERSION}"
         REMOTE_USER = 'root'
         REMOTE_IP = '67.205.183.170'
     }
@@ -68,7 +67,7 @@ pipeline {
                 script {
                     echo "deploying on server...."
                     sshagent(['remote-server-ssh']) {
-                        sh "ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_IP} 'docker pull ${IMAGE_NAME}'"
+                        sh "ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_IP} 'docker pull analystrusso/jenkins-exercise:${BUILD_VERSION}'"
                     }
                 }
             }
